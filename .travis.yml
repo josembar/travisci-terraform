@@ -26,8 +26,13 @@ jobs:
         - terraform plan $tf_plan_cli_options
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
+      if: type IN (push) and branch = develop
+      script:
+        - echo "Executing Terraform Apply on merged code"
+        - terraform init $tf_init_cli_options
+        - terraform apply $tf_apply_cli_options -var-file dev.tfvars
       if: type IN (push) and branch = main
       script:
         - echo "Executing Terraform Apply on merged code"
         - terraform init $tf_init_cli_options
-        - terraform apply $tf_apply_cli_options
+        - terraform apply $tf_apply_cli_options -var-file prod.tfvars
