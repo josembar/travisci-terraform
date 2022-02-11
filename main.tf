@@ -3,5 +3,3 @@ module "s3_bucket_test" {
   environment = var.environment
   bucket_name = var.bucket_name
 }
-
-#emulate changes
