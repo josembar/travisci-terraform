@@ -3,5 +3,9 @@ module "s3_bucket_test" {
   environment = var.environment
   bucket_name = var.bucket_name
 }
-  
-  #comment
+
+resource "aws_s3_bucket" "bucket_two" {
+  tags = {
+    Environment = var.environment
+  }
+}
