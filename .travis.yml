@@ -33,7 +33,6 @@ jobs:
       if: type IN (push) and branch = develop
       script:
         - echo "Executing Terraform Apply on merged code"
-        - echo $TRAVIS_BRANCH
         - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options -var-file dev.tfvars
     - stage: "terraform apply"
