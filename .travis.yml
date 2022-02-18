@@ -4,8 +4,7 @@ language: bash
 
 cache:
   directories:
-    - dev_tfplan
-    - prod_tfplan
+    - tfplan
 
 env:
   - tf_version=0.14.9 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
@@ -28,8 +27,9 @@ jobs:
         - echo "Executing Terraform Plan on pull request code"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
-        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars -out=dev_tfplan; fi
-        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars -out=prod_tfplan; fi
+        - mkdir -v tfplan
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars -out=tfplan/dev_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars -out=tfplan/prod_tfplan; fi
     - stage: "terraform apply"
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push)
