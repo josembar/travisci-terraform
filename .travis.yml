@@ -1,7 +1,5 @@
 dist: xenial # Ubuntu 16.04
 
-sudo: true
-
 language: bash
 
 cache:
