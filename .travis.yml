@@ -17,7 +17,7 @@ before_install:
   - rm terraform_"$tf_version"_linux_amd64.zip
 
 before_script: 
-  - mkdir -v ${TRAVIS_BUILD_DIR}/tfplan
+  - mkdir -v tfplan
 
 # Terraform Plan and Apply
 # Plan only on pull requests, Apply on merged code
