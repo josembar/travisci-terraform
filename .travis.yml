@@ -38,5 +38,5 @@ jobs:
         - terraform init $tf_init_cli_options
         #- if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options -var-file dev.tfvars; fi
         #- if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options -var-file prod.tfvars; fi
-        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options dev_tfplan; fi
-        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options prod_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options tfplan/dev_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options tfplan/prod_tfplan; fi
