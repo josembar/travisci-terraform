@@ -2,6 +2,10 @@ dist: xenial # Ubuntu 16.04
 
 language: bash
 
+cache:
+  directories:
+  - .terraform
+
 env:
   - tf_version=0.14.9 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
@@ -30,6 +34,7 @@ jobs:
       if: type IN (push)
       script:
         - echo "Executing Terraform Apply on merged code"
-        - terraform init $tf_init_cli_options
+        #- terraform init $tf_init_cli_options
+        - ls -la
         - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options -var-file dev.tfvars; fi
         - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options -var-file prod.tfvars; fi
