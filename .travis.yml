@@ -16,6 +16,9 @@ before_install:
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$tf_version"_linux_amd64.zip
 
+before_script: 
+  - mkdir -v tfplan
+
 # Terraform Plan and Apply
 # Plan only on pull requests, Apply on merged code
 jobs:
@@ -27,7 +30,6 @@ jobs:
         - echo "Executing Terraform Plan on pull request code"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
-        - mkdir -v tfplan
         - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars -out=tfplan/dev_tfplan; fi
         - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars -out=tfplan/prod_tfplan; fi
     - stage: "terraform apply"
