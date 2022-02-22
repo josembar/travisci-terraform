@@ -2,10 +2,6 @@ dist: xenial # Ubuntu 16.04
 
 language: bash
 
-cache:
-  directories:
-    - tfplan
-
 env:
   - tf_version=0.14.9 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
@@ -26,17 +22,17 @@ jobs:
       script:
         - echo "Executing Terraform Plan on pull request code"
         - terraform init $tf_init_cli_options
+        - terraform workspace list #list workspaces
         - terraform validate $tf_validation_cli_options
-        #- mkdir -v tfplan
-        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars -out=tfplan/dev_tfplan; fi
-        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars -out=tfplan/prod_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform workspace select dev; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform workspace select prod; fi
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars; fi
     - stage: "terraform apply"
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push)
       script:
         - echo "Executing Terraform Apply on merged code"
         - terraform init $tf_init_cli_options
-        #- if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options -var-file dev.tfvars; fi
-        #- if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options -var-file prod.tfvars; fi
-        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options tfplan/dev_tfplan; fi
-        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options tfplan/prod_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options -var-file dev.tfvars; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options -var-file prod.tfvars; fi
