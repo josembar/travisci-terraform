@@ -24,8 +24,8 @@ jobs:
         - terraform init $tf_init_cli_options
         - terraform workspace list #list workspaces
         - terraform validate $tf_validation_cli_options
-        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars -out=tfplan/dev_tfplan; fi
-        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars -out=tfplan/prod_tfplan; fi
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars; fi
     - stage: "terraform apply"
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push)
