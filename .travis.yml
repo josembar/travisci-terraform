@@ -34,5 +34,7 @@ jobs:
       script:
         - echo "Executing Terraform Apply on merged code"
         - terraform init $tf_init_cli_options
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform workspace select dev; fi
         - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform apply $tf_apply_cli_options -var-file dev.tfvars; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform workspace select prod; fi
         - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform apply $tf_apply_cli_options -var-file prod.tfvars; fi
