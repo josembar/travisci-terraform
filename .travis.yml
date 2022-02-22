@@ -24,6 +24,8 @@ jobs:
         - terraform init $tf_init_cli_options
         - terraform workspace list #list workspaces
         - terraform validate $tf_validation_cli_options
+        - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform workspace select dev; fi
+        - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform workspace select prod; fi
         - if [ "$TRAVIS_BRANCH" = "develop" ]; then terraform plan $tf_plan_cli_options -var-file dev.tfvars; fi
         - if [ "$TRAVIS_BRANCH" = "main" ]; then terraform plan $tf_plan_cli_options -var-file prod.tfvars; fi
     - stage: "terraform apply"
